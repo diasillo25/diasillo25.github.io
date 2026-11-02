@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Dawson Iasillo</title>
+  <meta name="description" content="Dawson Iasillo is a Nebraska student journalist, newscast anchor, columnist and podcast host studying Journalism and Political Science at the University of Nebraska–Lincoln.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,800;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #faf7f2;
+      --ink: #1a1a1a;
+      --muted: #5f5b55;
+      --rule: #ddd6ca;
+      --card: #ffffff;
+      --accent: #b3261e;
+      --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+      --sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #141414;
+        --ink: #f1ede6;
+        --muted: #a39e95;
+        --rule: #333;
+        --card: #1d1d1d;
+        --accent: #ff6b5f;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 1.0625rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+    .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+
+    /* Top bar */
+    .topbar {
+      border-bottom: 1px solid var(--rule);
+      padding: 16px 0;
+      font-size: .8125rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .topbar .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .topbar a { color: var(--ink); text-decoration: none; font-weight: 500; }
+    .topbar a:hover { color: var(--accent); }
+    .topbar nav { display: flex; gap: 20px; }
+
+    /* Hero */
+    .hero { padding: 72px 0 56px; }
+    .hero { display: grid; grid-template-columns: 1fr 300px; gap: 48px; align-items: center; }
+    .portrait { margin: 0; }
+    .portrait img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: 50% 28%;
+      border: 1px solid var(--rule);
+      box-shadow: 10px 10px 0 var(--accent);
+    }
+    @media (max-width: 720px) {
+      .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 48px; }
+      .portrait { order: -1; max-width: 260px; }
+    }
+    .kicker {
+      font-size: .8125rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 0 0 18px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 800;
+      font-size: clamp(2.75rem, 9vw, 5.5rem);
+      line-height: 1;
+      letter-spacing: -.02em;
+      margin: 0 0 28px;
+    }
+    .lede {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+      line-height: 1.4;
+      max-width: 36ch;
+      margin: 0;
+    }
+
+    /* Stats */
+    .stats {
+      border-top: 3px double var(--ink);
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .stat { padding: 26px 16px; text-align: center; border-left: 1px solid var(--rule); }
+    .stat:first-child { border-left: 0; }
+    .stat b {
+      display: block;
+      font-family: var(--serif);
+      font-size: clamp(1.9rem, 5vw, 2.75rem);
+      line-height: 1.1;
+      font-weight: 800;
+    }
+    .stat span { font-size: .875rem; color: var(--muted); display: block; margin-top: 6px; line-height: 1.4; }
+    @media (max-width: 640px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(3) { border-left: 0; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--rule); }
+    }
+
+    /* Sections */
+    section { padding: 64px 0 0; }
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.7rem, 4vw, 2.2rem);
+      font-weight: 800;
+      margin: 0 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    h2::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+
+    .story { columns: 2 320px; column-gap: 40px; }
+    .story p { margin: 0 0 1.1em; break-inside: avoid-column; }
+    .story p:first-child::first-letter {
+      font-family: var(--serif);
+      font-weight: 800;
+      font-size: 4.2rem;
+      line-height: .8;
+      float: left;
+      padding: 6px 10px 0 0;
+      color: var(--accent);
+    }
+
+    /* Feature cards */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-top: 4px solid var(--accent);
+      padding: 24px;
+    }
+    .card h3 { font-family: var(--serif); font-size: 1.3rem; margin: 0 0 4px; line-height: 1.25; }
+    .card .role { color: var(--muted); font-size: .875rem; margin: 0 0 12px; }
+    .card p { margin: 0; font-size: 1rem; }
+
+    /* Timeline */
+    .timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--ink); }
+    .timeline li { position: relative; padding: 0 0 34px 28px; }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: -7px; top: 9px;
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border: 2px solid var(--paper);
+      border-radius: 50%;
+      box-sizing: content-box;
+    }
+    .timeline .when {
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .timeline h3 { font-family: var(--serif); font-size: 1.25rem; margin: 2px 0 2px; line-height: 1.3; }
+    .timeline .where { color: var(--accent); font-weight: 500; font-size: .95rem; margin: 0 0 6px; }
+    .timeline p { margin: 0; }
+
+    /* Lists */
+    .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; }
+    .chips { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+    .chips li {
+      border: 1px solid var(--ink);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: .95rem;
+    }
+    .awards { list-style: none; padding: 0; margin: 0; }
+    .awards li { padding: 9px 0 9px 26px; border-bottom: 1px solid var(--rule); position: relative; }
+    .awards li::before { content: "★"; position: absolute; left: 0; color: var(--accent); }
+
+    /* Contact */
+    .contact {
+      margin-top: 72px;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 56px 0 64px;
+    }
+    .contact h2 { color: var(--paper); }
+    .contact h2::after { background: color-mix(in srgb, var(--paper) 30%, transparent); }
+    .contact p { max-width: 52ch; margin: 0 0 24px; }
+    .btn {
+      display: inline-block;
+      background: var(--paper);
+      color: var(--ink);
+      padding: 13px 26px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: .02em;
+    }
+    .btn:hover { background: var(--accent); color: #fff; }
+    footer { padding: 22px 0; font-size: .85rem; color: var(--muted); text-align: center; }
+
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap">
+      <a href="./">Dawson Iasillo</a>
+      <nav aria-label="Page sections">
+        <a href="#story">Story</a>
+        <a href="#production">Production</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="hero">
+        <div class="hero-text">
+          <p class="kicker">About me</p>
+          <h1>Dawson Iasillo</h1>
+          <p class="lede">Student journalist, newscast anchor and political reporter from Nebraska, telling the stories behind the headlines.</p>
+        </div>
+        <figure class="portrait">
+          <img src="images/headshot.jpg" alt="Dawson Iasillo smiling in front of a University building" width="1251" height="2000" fetchpriority="high">
+        </figure>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="stats" role="list">
+        <div class="stat" role="listitem"><b>20,000+</b><span>readers reached by my opinion columns</span></div>
+        <div class="stat" role="listitem"><b>100+</b><span>people interviewed across 10 U.S. cities</span></div>
+        <div class="stat" role="listitem"><b>100+</b><span>people coordinated for midterm election coverage</span></div>
+        <div class="stat" role="listitem"><b>21</b><span>national Carnegie-Knight News21 fellows</span></div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section id="story">
+        <h2>My story</h2>
+        <div class="story">
+          <p>I'm a senior at the University of Nebraska–Lincoln, graduating in December 2026 with a degree in Journalism and Political Science. I grew up in Scottsbluff, in the Nebraska Panhandle, and I've been chasing stories ever since: the ones that shape our communities and the ones that rarely get told.</p>
+          <p>Politics and journalism are two halves of the same job for me. At <strong>Nebraska Nightly</strong> I anchor live newscasts, interview newsmakers and, as executive producer, help lead the newsroom. In the <strong>Daily Nebraskan</strong> I write opinion columns and edit and fact-check my peers' work. And on my own <strong>Punctual Politics</strong> podcast, I break down the week in political news.</p>
+          <p>In summer 2025 I was selected as one of 21 students nationwide for the <strong>Carnegie-Knight News21</strong> fellowship in Phoenix, an investigative reporting project on housing in America. I spoke with more than 100 people across 10 cities and produced photo essays profiling people who have faced homelessness.</p>
+          <p>When I'm not in the newsroom, I'm often on the campaign trail, in the classroom as a college ambassador teaching workshops to high schoolers, or in the Legislature taking notes on hearings. I like being close to the people and the process I report on.</p>
+        </div>
+      </section>
+
+      <section id="highlights">
+        <h2>Right now</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Nebraska Nightly</h3>
+            <p class="role">Executive Producer, Political Reporter &amp; Anchor</p>
+            <p>Leading Nebraska's largest coverage of the 2026 midterms, coordinating over 100 people across three news branches.</p>
+          </article>
+          <article class="card">
+            <h3>Daily Nebraskan</h3>
+            <p class="role">Senior Opinion Editor &amp; Columnist</p>
+            <p>Weekly columns, editing and fact-checking, and a seat at the table for newsroom decisions.</p>
+          </article>
+          <article class="card">
+            <h3>Punctual Politics</h3>
+            <p class="role">Host &amp; Producer</p>
+            <p>A weekly political news podcast, recorded, edited and published to YouTube and Spotify.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="production">
+        <h2>News production</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>On air</h3>
+            <p class="role">Anchor &amp; reporter</p>
+            <p>I anchor live newscasts, write the scripts for broadcast and conduct exclusive interviews.</p>
+          </article>
+          <article class="card">
+            <h3>Behind the scenes</h3>
+            <p class="role">Executive producer</p>
+            <p>I assign stories, oversee student reporters, and produce and edit broadcasts for air.</p>
+          </article>
+          <article class="card">
+            <h3>Audio &amp; video</h3>
+            <p class="role">Podcast host &amp; producer</p>
+            <p>I record, edit and publish weekly episodes of Punctual Politics to YouTube and Spotify.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="experience">
+        <h2>Experience</h2>
+        <ol class="timeline">
+          <li>
+            <span class="when">Summer 2025</span>
+            <h3>National Fellow</h3>
+            <p class="where">Carnegie-Knight News21 · Phoenix, AZ</p>
+            <p>Investigative internship on housing in America. One of the top 21 student journalists selected nationally each summer.</p>
+          </li>
+          <li>
+            <span class="when">Jan 2025 – Present</span>
+            <h3>Executive Producer, Political Reporter &amp; Anchor</h3>
+            <p class="where">Nebraska Nightly · Lincoln, NE</p>
+            <p>Assign stories, oversee student reporters, anchor live broadcasts, write scripts and conduct exclusive interviews.</p>
+          </li>
+          <li>
+            <span class="when">Oct 2025 – Present</span>
+            <h3>COJMC Ambassador</h3>
+            <p class="where">UNL College of Journalism and Mass Communications</p>
+            <p>Recruit prospective students, promote college events and teach journalism workshops to high school students.</p>
+          </li>
+          <li>
+            <span class="when">Aug 2025 – Present</span>
+            <h3>Podcast Host</h3>
+            <p class="where">Punctual Politics · Lincoln, NE</p>
+            <p>Host and produce a weekly political news podcast.</p>
+          </li>
+          <li>
+            <span class="when">Apr – Aug 2025</span>
+            <h3>Communications Manager</h3>
+            <p class="where">Dream for America · Remote</p>
+            <p>Coordinated speaker outreach for DemocracyFest 2025 and promoted the organization on college campuses nationwide.</p>
+          </li>
+          <li>
+            <span class="when">Sept 2024 – Present</span>
+            <h3>Senior Opinion Editor &amp; Columnist</h3>
+            <p class="where">Daily Nebraskan · Lincoln, NE</p>
+            <p>18+ published articles, with columns reaching 20,000+ readers. Edit and fact-check submissions and manage responses to controversial pieces.</p>
+          </li>
+          <li>
+            <span class="when">Aug 2024 – Present</span>
+            <h3>Lead Intern Manager</h3>
+            <p class="where">Osborn for Senate Campaign · Lincoln, NE</p>
+            <p>Coordinate events and outreach, run phone banking (75–100 calls per session), support social media strategy and opened and staffed the campaign's new Scottsbluff office.</p>
+          </li>
+          <li>
+            <span class="when">Earlier</span>
+            <h3>Legislative Notetaker</h3>
+            <p class="where">Kissel, Kohout, ES Associates LLC · Lincoln, NE</p>
+            <p>Wrote detailed summaries of Nebraska Unicameral hearings for lobbyists, building policy analysis skills.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="recognition">
+        <div class="two">
+          <div>
+            <h2>Recognition</h2>
+            <ul class="awards">
+              <li>1st Place, National Issue Article (2024)</li>
+              <li>3rd Place, Personal Column (2024)</li>
+              <li>Nebraska State Journalism Competition, Editorial State Champion</li>
+              <li>Susan B. Anthony Award</li>
+              <li>George Mason University Invitational Nominee</li>
+              <li>Sandy &amp; Larry Lutz Reporting Scholarship</li>
+              <li>Chloe &amp; Emil Reutzel Scholarship</li>
+              <li>Miller Family Leadership Scholarship</li>
+              <li>P.E.O. STAR Scholarship</li>
+              <li>Husker Power Scholarship</li>
+            </ul>
+          </div>
+          <div>
+            <h2>What I do</h2>
+            <ul class="chips">
+              <li>Political reporting</li>
+              <li>Broadcast writing</li>
+              <li>Editing &amp; fact-checking</li>
+              <li>Interviewing</li>
+              <li>Podcast production</li>
+              <li>Campaign communications</li>
+              <li>Newsroom leadership</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="contact" id="contact">
+      <div class="wrap">
+        <h2>Let's talk</h2>
+        <p>Have a story idea, an opportunity, or just want to say hello? I'd love to hear from you.</p>
+        <a class="btn" href="mailto:dawsoniasillo@gmail.com">dawsoniasillo@gmail.com</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 Dawson Iasillo · Lincoln, Nebraska</footer>
+
+</body>
+</html>
