@@ -9,60 +9,98 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Open+Sans:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --red: #ba1f1f; --red-soft: #cb5757; --grey: #f4f4f4; --text: #333; --muted: #515151; --line: #c9c8cd; }
+    :root { --red: #ba1f1f; --red-dark: #8f1717; --red-soft: #cb5757; --grey: #f1f1f1; --charcoal: #333; --slate: #4d4d4d; --text: #333; --muted: #515151; --line: #ddd; }
     * { box-sizing: border-box; }
-    body { margin: 0; background: #fff; color: var(--text); font-family: "Open Sans", sans-serif; font-size: 1rem; line-height: 1.6; }
+    body { margin: 0; color: var(--text); font-family: "Open Sans", sans-serif; font-size: 14px; line-height: 1.55;
+      background-color: var(--grey);
+      background-image: radial-gradient(rgba(186,31,31,.14) 1.2px, transparent 1.3px); background-size: 14px 14px; }
     a { color: var(--red); }
     :focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
-    .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
 
-    .utility { background: var(--grey); border-bottom: 1px solid var(--line); font-size: .75rem; color: var(--muted); padding: 6px 0; }
-    .utility .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-    .utility a { color: var(--muted); text-decoration: none; }
-    .masthead { border-bottom: 3px solid var(--red); padding: 22px 0 14px; text-align: center; }
-    .masthead .name { font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: clamp(2rem, 8vw, 3.4rem); line-height: 1; margin: 0; color: var(--red); letter-spacing: .01em; text-transform: uppercase; }
-    .masthead .sub { margin: 6px 0 0; font-size: .75rem; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
-    .nav { background: var(--red); }
-    .nav .wrap { display: flex; gap: 0; overflow-x: auto; }
-    .nav a { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: .8rem; text-transform: uppercase; color: #fff; text-decoration: none; padding: 12px 16px; white-space: nowrap; }
-    .nav a:hover, .nav a.on { background: #fff; color: var(--red); }
+    /* Header, like dailynebraskan.com: charcoal bar, grey nav, red accents */
+    .ticker { background: var(--red); color: #fff; overflow: hidden; white-space: nowrap; font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
+    .ticker span { display: inline-block; padding: 6px 0; animation: scroll 38s linear infinite; padding-left: 100%; }
+    @keyframes scroll { to { transform: translateX(-100%); } }
+    @media (prefers-reduced-motion: reduce) { .ticker span { animation: none; padding-left: 16px; } }
+    .masthead { background: var(--charcoal); color: #fff; border-bottom: 3px solid var(--red); padding: 18px 0; }
+    .masthead .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .masthead .name { font-family: "Open Sans", sans-serif; font-weight: 700; font-size: clamp(1.7rem, 6vw, 2.6rem); letter-spacing: -.02em; margin: 0; line-height: 1; }
+    .masthead .name em { font-style: normal; color: #ff8a80; }
+    .masthead .sub { margin: 4px 0 0; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #bbb; }
+    .est { border: 2px solid #fff; padding: 4px 10px; font-family: "Roboto Condensed", sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: 12px; transform: rotate(-3deg); }
+    .nav { background: #fff; border-bottom: 1px solid var(--line); }
+    .nav .wrap { display: flex; overflow-x: auto; }
+    .nav a { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 12px; text-transform: uppercase; color: var(--text); text-decoration: none; padding: 12px 16px; white-space: nowrap; border-top: 3px solid transparent; }
+    .nav a:hover, .nav a.on { border-top-color: var(--red); color: var(--red); background: var(--grey); }
 
-    .game { max-width: 720px; margin: 0 auto; padding: 28px 16px 64px; }
-    .block-title { background: var(--red); border-bottom: 3px solid var(--red-soft); color: #fff; font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; padding: 6px 14px; margin: 0; }
-    .intro { color: var(--muted); margin: 16px 0 24px; }
-    .status { display: flex; justify-content: space-between; font-family: "Montserrat", sans-serif; font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--line); padding: 10px 0; margin-bottom: 20px; }
-    .card { background: #fff; border: 1px solid var(--line); border-top: 3px solid var(--red); padding: 28px 24px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
-    .section-tag { font-family: "Montserrat", sans-serif; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--red); font-weight: 700; margin: 0 0 10px; }
-    .headline { font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: clamp(1.6rem, 5vw, 2.2rem); line-height: 1.15; margin: 0 0 26px; color: #111; }
+    /* Three-column page: side rails + game */
+    .page { max-width: 1120px; margin: 24px auto 48px; padding: 0 16px; display: grid; grid-template-columns: 220px minmax(0, 1fr) 220px; gap: 20px; align-items: start; }
+    .rail { display: flex; flex-direction: column; gap: 20px; }
+    .panel { background: #fff; border: 1px solid var(--line); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .panel h3, .block-title { margin: 0; background: var(--red); border-bottom: 3px solid var(--red-soft); color: #fff; font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: 17px; text-transform: uppercase; padding: 6px 12px; text-shadow: 1px 1px 1px rgba(0,0,0,.25); }
+    .panel .body { padding: 12px 14px; font-size: 13px; }
+    .panel ol, .panel ul { margin: 0; padding-left: 18px; }
+    .panel li { margin-bottom: 6px; }
+    .stat { display: flex; justify-content: space-between; border-bottom: 1px dotted var(--line); padding: 6px 0; }
+    .stat b { font-family: "Roboto Condensed", sans-serif; font-size: 20px; color: var(--red); line-height: 1.2; }
+    .panel .body > .stat:last-child { border-bottom: 0; }
+    .stampbox { display: flex; justify-content: center; padding: 14px 0 6px; }
+    .stamp { border: 4px double var(--red); color: var(--red); font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: 26px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 14px; transform: rotate(-8deg); opacity: .85; }
+    .stamp.alt { color: var(--slate); border-color: var(--slate); transform: rotate(6deg); }
+
+    .game { min-width: 0; }
+    .gamebox { background: #fff; border: 1px solid var(--line); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .gamebox .inner { padding: 20px; }
+    .intro { margin: 0 0 18px; color: var(--muted); font-size: 15px; }
+    .status { display: flex; justify-content: space-between; font-family: "Montserrat", sans-serif; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--line); padding: 0 0 10px; margin-bottom: 18px; }
+    .progress { height: 4px; background: var(--line); margin: -8px 0 18px; }
+    .progress i { display: block; height: 100%; background: var(--red); width: 0; transition: width .3s; }
+    .card { position: relative; border-left: 6px solid var(--red); background: #faf8f5; border-top: 1px solid #eae6df; border-right: 1px solid #eae6df; border-bottom: 1px solid #eae6df; padding: 24px 22px; overflow: hidden; }
+    .kicker { font-family: "Montserrat", sans-serif; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--red); font-weight: 700; margin: 0 0 8px; }
+    .headline { font-family: "Open Sans", sans-serif; font-weight: 700; font-size: clamp(1.5rem, 4.5vw, 2.1rem); line-height: 1.2; margin: 0 0 22px; color: #1a1a1a; letter-spacing: -.01em; }
     .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    button.btn { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: .95rem; text-transform: uppercase; padding: 14px; border: 2px solid var(--red); background: #fff; color: var(--red); cursor: pointer; }
+    button.btn { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase; padding: 14px; border: 2px solid var(--red); border-radius: 4px; background: #fff; color: var(--red); cursor: pointer; }
     button.btn:hover { background: var(--red); color: #fff; }
     button.primary { background: var(--red); color: #fff; }
-    button.primary:hover { background: #8f1717; border-color: #8f1717; }
-    .result { margin-top: 24px; padding: 18px; background: var(--grey); border-left: 4px solid var(--red); }
+    button.primary:hover { background: var(--red-dark); border-color: var(--red-dark); }
+    .result { margin-top: 20px; padding: 16px; background: #fff; border: 1px solid #eae6df; border-left: 4px solid var(--slate); position: relative; }
     .verdict { font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: 1.4rem; margin: 0; text-transform: uppercase; }
     .verdict.good { color: #1e7a3c; }
     .verdict.bad { color: var(--red); }
-    .truth { font-weight: 700; margin: 0 0 10px; }
-    .why { margin: 0 0 16px; }
-    .source { display: inline-block; margin-bottom: 16px; font-weight: 700; }
+    .truth { font-weight: 700; margin: 0 0 8px; }
+    .why { margin: 0 0 14px; font-size: 15px; }
+    .source { display: inline-block; margin-bottom: 14px; font-weight: 700; }
+    #resStamp { position: absolute; top: 14px; right: 14px; }
     .hidden { display: none; }
     .final { text-align: center; }
     .final .score { font-family: "Roboto Condensed", sans-serif; font-size: 4rem; font-weight: 700; margin: 0; color: var(--red); line-height: 1.1; }
-    .final p { margin: 8px 0 20px; }
-    .review { text-align: left; margin-top: 24px; padding: 0; list-style: none; }
-    .review li { padding: 12px 0; border-top: 1px solid var(--line); font-weight: 600; }
+    .final p { margin: 8px 0 18px; }
+    .review { text-align: left; margin-top: 20px; padding: 0; list-style: none; }
+    .review li { padding: 10px 0; border-top: 1px solid var(--line); font-weight: 600; }
     .review .mark { font-weight: 700; margin-right: 6px; }
     .review small { display: block; color: var(--muted); font-weight: 400; }
-    .back { margin-top: 28px; font-size: .85rem; color: var(--muted); }
-    footer.site { border-top: 3px solid var(--red); background: var(--grey); padding: 16px 0; font-size: .75rem; color: var(--muted); text-align: center; }
+    .back { margin: 16px 0 0; font-size: 12px; color: var(--muted); }
+
+    footer.site { background: var(--charcoal); border-top: 3px solid var(--red); color: #fff; padding: 18px 0; font-size: 12px; text-align: center; }
+    footer.site a { color: #ff8a80; }
+
+    @media (max-width: 960px) {
+      .page { grid-template-columns: minmax(0, 1fr); }
+      .rail { display: none; }
+      .est { display: none; }
+    }
   </style>
 </head>
 <body>
-  <div class="utility"><div class="wrap"><span>An unofficial fan game, not affiliated with the Daily Nebraskan</span><a href="../">Dawson Iasillo</a></div></div>
   <header class="masthead">
-    <p class="name">Real or Fake?</p>
-    <p class="sub">The Daily Nebraskan headline game</p>
+    <div class="wrap">
+      <div>
+        <p class="name">Headline <em>or</em> Hoax</p>
+        <p class="sub">A Daily Nebraskan headline game</p>
+      </div>
+      <div class="est" aria-hidden="true">Est. 1901</div>
+    </div>
   </header>
   <nav class="nav" aria-label="Main"><div class="wrap">
     <a class="on" href="./">Game</a>
@@ -70,41 +108,95 @@
     <a href="../">Home</a>
   </div></nav>
 
-  <main class="game">
-    <h1 class="block-title">Play</h1>
-    <p class="intro">Ten headlines. Some ran in the <em>Daily Nebraskan</em>; some were made up for this game. Decide which is which, then read why. Real ones link straight to the article.</p>
-
-    <div id="play" class="hidden" aria-live="polite">
-      <div class="status"><span id="count"></span><span id="score"></span></div>
-      <div class="card">
-        <h2 class="headline" id="headline"></h2>
-        <div class="choices" id="choices">
-          <button class="btn" data-guess="real">Real</button>
-          <button class="btn" data-guess="fake">Fake</button>
+  <div class="page">
+    <aside class="rail" aria-label="How to play">
+      <section class="panel">
+        <h3>How to play</h3>
+        <div class="body">
+          <ol>
+            <li>Read the headline.</li>
+            <li>Call it <b>Real</b> or <b>Fake</b>.</li>
+            <li>Find out why, and read the real story.</li>
+          </ol>
         </div>
-        <div class="result hidden" id="result">
-          <p class="verdict" id="verdict"></p>
-          <p class="truth" id="truth"></p>
-          <p class="why" id="why"></p>
-          <a class="source hidden" id="source" target="_blank" rel="noopener noreferrer">Read the real article on dailynebraskan.com &rarr;</a>
-          <div><button class="btn primary" id="next">Next headline</button></div>
+      </section>
+      <section class="panel">
+        <h3>Your record</h3>
+        <div class="body">
+          <div class="stat"><span>Best score</span><b id="stBest">&ndash;</b></div>
+          <div class="stat"><span>Games played</span><b id="stPlayed">0</b></div>
+          <div class="stat"><span>Accuracy</span><b id="stAcc">&ndash;</b></div>
+        </div>
+      </section>
+      <div class="stampbox" aria-hidden="true"><span class="stamp">Real</span></div>
+    </aside>
+
+    <main class="game">
+      <div class="gamebox">
+        <h1 class="block-title">Is it real?</h1>
+        <div class="inner">
+          <p class="intro">Ten headlines. Some ran in the <em>Daily Nebraskan</em>; some were made up for this game. Decide which is which, then read why. Real ones link straight to the article.</p>
+
+          <div id="play" class="hidden" aria-live="polite">
+            <div class="status"><span id="count"></span><span id="score"></span></div>
+            <div class="progress"><i id="bar"></i></div>
+            <div class="card">
+              <p class="kicker">Today's headline</p>
+              <h2 class="headline" id="headline"></h2>
+              <div class="choices" id="choices">
+                <button class="btn" data-guess="real">Real</button>
+                <button class="btn" data-guess="fake">Fake</button>
+              </div>
+              <div class="result hidden" id="result">
+                <span class="stamp" id="resStamp"></span>
+                <p class="verdict" id="verdict"></p>
+                <p class="truth" id="truth"></p>
+                <p class="why" id="why"></p>
+                <a class="source hidden" id="source" target="_blank" rel="noopener noreferrer">Read the real article on dailynebraskan.com &rarr;</a>
+                <div><button class="btn primary" id="next">Next headline</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="start"><button class="btn primary" id="startBtn">Start game</button></div>
+
+          <div id="end" class="final hidden">
+            <p class="kicker">Final score</p>
+            <p class="score" id="finalScore"></p>
+            <p id="finalMsg"></p>
+            <button class="btn primary" id="again">Play again</button>
+            <ul class="review" id="review"></ul>
+          </div>
+
+          <p class="back"><a href="../">&larr; Back to home</a> &middot; Headlines from <a href="https://www.dailynebraskan.com/" target="_blank" rel="noopener noreferrer">dailynebraskan.com</a>. Fake headlines are invented for fun and are not from the paper.</p>
         </div>
       </div>
-    </div>
+    </main>
 
-    <div id="start"><button class="btn primary" id="startBtn">Start game</button></div>
+    <aside class="rail" aria-label="Tips">
+      <section class="panel">
+        <h3>Spot the tells</h3>
+        <div class="body">
+          <ul>
+            <li>Real stories name people, places and dates.</li>
+            <li>Fakes lean on round numbers and vague "studies."</li>
+            <li>If it sounds too funny, it probably is.</li>
+            <li>Familiar formats can still be faked.</li>
+          </ul>
+        </div>
+      </section>
+      <section class="panel">
+        <h3>Read the paper</h3>
+        <div class="body">
+          Like the real stories? Get more from the student voice of UNL.<br><br>
+          <a href="https://www.dailynebraskan.com/" target="_blank" rel="noopener noreferrer"><b>dailynebraskan.com &rarr;</b></a>
+        </div>
+      </section>
+      <div class="stampbox" aria-hidden="true"><span class="stamp alt">Hoax</span></div>
+    </aside>
+  </div>
 
-    <div id="end" class="card final hidden">
-      <p class="section-tag">Final score</p>
-      <p class="score" id="finalScore"></p>
-      <p id="finalMsg"></p>
-      <button class="btn primary" id="again">Play again</button>
-      <ul class="review" id="review"></ul>
-    </div>
-
-    <p class="back"><a href="../">&larr; Back to home</a> · Headlines from <a href="https://www.dailynebraskan.com/" target="_blank" rel="noopener noreferrer">dailynebraskan.com</a>. Fake headlines are invented for fun and are not from the paper.</p>
-  </main>
-  <footer class="site"><div class="wrap">Headlines from dailynebraskan.com. Fake headlines are invented for this game. Design inspired by the Daily Nebraskan website.</div></footer>
+  <footer class="site"><div class="wrap">An unofficial fan game, not affiliated with the Daily Nebraskan. Headlines from <a href="https://www.dailynebraskan.com/" target="_blank" rel="noopener noreferrer">dailynebraskan.com</a>. Fake headlines are invented for this game. Design inspired by the Daily Nebraskan website.</div></footer>
 
   <script>
     var BASE = "https://www.dailynebraskan.com";
@@ -213,6 +305,10 @@
       if (correct) score++;
       log.push({ q: q, correct: correct });
       $("score").textContent = "Score: " + score;
+      $("bar").style.width = ((i + 1) / ROUNDS * 100) + "%";
+      var rs = $("resStamp");
+      rs.textContent = q.real ? "Real" : "Hoax";
+      rs.className = "stamp" + (q.real ? "" : " alt");
       var v = $("verdict");
       v.textContent = correct ? "Correct!" : "Not quite.";
       v.className = "verdict " + (correct ? "good" : "bad");
@@ -226,7 +322,22 @@
       $("next").focus();
     }
 
+    function stats(add) {
+      var d = { best: null, played: 0, right: 0, total: 0 };
+      try { d = JSON.parse(localStorage.getItem("hohStats")) || d; } catch (e) {}
+      if (add) {
+        d.played++; d.right += add.right; d.total += add.total;
+        d.best = d.best === null ? add.right : Math.max(d.best, add.right);
+        try { localStorage.setItem("hohStats", JSON.stringify(d)); } catch (e) {}
+      }
+      $("stBest").textContent = d.best === null ? "–" : d.best + "/" + ROUNDS;
+      $("stPlayed").textContent = d.played;
+      $("stAcc").textContent = d.total ? Math.round(d.right / d.total * 100) + "%" : "–";
+    }
+    stats();
+
     function finish() {
+      stats({ right: score, total: ROUNDS });
       $("play").classList.add("hidden");
       $("end").classList.remove("hidden");
       $("finalScore").textContent = score + " / " + ROUNDS;
