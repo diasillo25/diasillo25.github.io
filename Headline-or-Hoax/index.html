@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real or Fake? Daily Nebraskan Headlines</title>
+  <meta name="description" content="A guessing game: can you tell real Daily Nebraskan headlines from fake ones?">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Open+Sans:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --red: #ba1f1f; --red-soft: #cb5757; --grey: #f4f4f4; --text: #333; --muted: #515151; --line: #c9c8cd; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #fff; color: var(--text); font-family: "Open Sans", sans-serif; font-size: 1rem; line-height: 1.6; }
+    a { color: var(--red); }
+    :focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+    .utility { background: var(--grey); border-bottom: 1px solid var(--line); font-size: .75rem; color: var(--muted); padding: 6px 0; }
+    .utility .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .utility a { color: var(--muted); text-decoration: none; }
+    .masthead { border-bottom: 3px solid var(--red); padding: 22px 0 14px; text-align: center; }
+    .masthead .name { font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: clamp(2rem, 8vw, 3.4rem); line-height: 1; margin: 0; color: var(--red); letter-spacing: .01em; text-transform: uppercase; }
+    .masthead .sub { margin: 6px 0 0; font-size: .75rem; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+    .nav { background: var(--red); }
+    .nav .wrap { display: flex; gap: 0; overflow-x: auto; }
+    .nav a { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: .8rem; text-transform: uppercase; color: #fff; text-decoration: none; padding: 12px 16px; white-space: nowrap; }
+    .nav a:hover, .nav a.on { background: #fff; color: var(--red); }
+
+    .game { max-width: 720px; margin: 0 auto; padding: 28px 16px 64px; }
+    .block-title { background: var(--red); border-bottom: 3px solid var(--red-soft); color: #fff; font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; padding: 6px 14px; margin: 0; }
+    .intro { color: var(--muted); margin: 16px 0 24px; }
+    .status { display: flex; justify-content: space-between; font-family: "Montserrat", sans-serif; font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--line); padding: 10px 0; margin-bottom: 20px; }
+    .card { background: #fff; border: 1px solid var(--line); border-top: 3px solid var(--red); padding: 28px 24px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    .section-tag { font-family: "Montserrat", sans-serif; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--red); font-weight: 700; margin: 0 0 10px; }
+    .headline { font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: clamp(1.6rem, 5vw, 2.2rem); line-height: 1.15; margin: 0 0 26px; color: #111; }
+    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    button.btn { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: .95rem; text-transform: uppercase; padding: 14px; border: 2px solid var(--red); background: #fff; color: var(--red); cursor: pointer; }
+    button.btn:hover { background: var(--red); color: #fff; }
+    button.primary { background: var(--red); color: #fff; }
+    button.primary:hover { background: #8f1717; border-color: #8f1717; }
+    .result { margin-top: 24px; padding: 18px; background: var(--grey); border-left: 4px solid var(--red); }
+    .verdict { font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: 1.4rem; margin: 0; text-transform: uppercase; }
+    .verdict.good { color: #1e7a3c; }
+    .verdict.bad { color: var(--red); }
+    .truth { font-weight: 700; margin: 0 0 10px; }
+    .why { margin: 0 0 16px; }
+    .source { display: inline-block; margin-bottom: 16px; font-weight: 700; }
+    .hidden { display: none; }
+    .final { text-align: center; }
+    .final .score { font-family: "Roboto Condensed", sans-serif; font-size: 4rem; font-weight: 700; margin: 0; color: var(--red); line-height: 1.1; }
+    .final p { margin: 8px 0 20px; }
+    .review { text-align: left; margin-top: 24px; padding: 0; list-style: none; }
+    .review li { padding: 12px 0; border-top: 1px solid var(--line); font-weight: 600; }
+    .review .mark { font-weight: 700; margin-right: 6px; }
+    .review small { display: block; color: var(--muted); font-weight: 400; }
+    .back { margin-top: 28px; font-size: .85rem; color: var(--muted); }
+    footer.site { border-top: 3px solid var(--red); background: var(--grey); padding: 16px 0; font-size: .75rem; color: var(--muted); text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="utility"><div class="wrap"><span>An unofficial fan game, not affiliated with the Daily Nebraskan</span><a href="../">Dawson Iasillo</a></div></div>
+  <header class="masthead">
+    <p class="name">Real or Fake?</p>
+    <p class="sub">The Daily Nebraskan headline game</p>
+  </header>
+  <nav class="nav" aria-label="Main"><div class="wrap">
+    <a class="on" href="./">Game</a>
+    <a href="https://www.dailynebraskan.com/" target="_blank" rel="noopener noreferrer">DailyNebraskan.com</a>
+    <a href="../">Home</a>
+  </div></nav>
+
+  <main class="game">
+    <h1 class="block-title">Play</h1>
+    <p class="intro">Ten headlines. Some ran in the <em>Daily Nebraskan</em>; some were made up for this game. Decide which is which, then read why. Real ones link straight to the article.</p>
+
+    <div id="play" class="hidden" aria-live="polite">
+      <div class="status"><span id="count"></span><span id="score"></span></div>
+      <div class="card">
+        <h2 class="headline" id="headline"></h2>
+        <div class="choices" id="choices">
+          <button class="btn" data-guess="real">Real</button>
+          <button class="btn" data-guess="fake">Fake</button>
+        </div>
+        <div class="result hidden" id="result">
+          <p class="verdict" id="verdict"></p>
+          <p class="truth" id="truth"></p>
+          <p class="why" id="why"></p>
+          <a class="source hidden" id="source" target="_blank" rel="noopener noreferrer">Read the real article on dailynebraskan.com &rarr;</a>
+          <div><button class="btn primary" id="next">Next headline</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="start"><button class="btn primary" id="startBtn">Start game</button></div>
+
+    <div id="end" class="card final hidden">
+      <p class="section-tag">Final score</p>
+      <p class="score" id="finalScore"></p>
+      <p id="finalMsg"></p>
+      <button class="btn primary" id="again">Play again</button>
+      <ul class="review" id="review"></ul>
+    </div>
+
+    <p class="back"><a href="../">&larr; Back to home</a> · Headlines from <a href="https://www.dailynebraskan.com/" target="_blank" rel="noopener noreferrer">dailynebraskan.com</a>. Fake headlines are invented for fun and are not from the paper.</p>
+  </main>
+  <footer class="site"><div class="wrap">Headlines from dailynebraskan.com. Fake headlines are invented for this game. Design inspired by the Daily Nebraskan website.</div></footer>
+
+  <script>
+    var BASE = "https://www.dailynebraskan.com";
+    // Real headlines were taken from the Daily Nebraskan homepage (Nov. 2026).
+    var REAL = [
+      { h: "ASUN to hold special election on new constitution, judicial code", tag: "News · ASUN", u: "/news/asun/asun-to-hold-special-election-on-new-constitution-judicial-code/article_e1df6e1b-7bde-45ba-b50a-f558c500a871.html",
+        why: "Student government elections and governing documents are a staple of campus news. The plain, specific wording (a special election, a constitution, a judicial code) is how a news story is headlined." },
+      { h: "University of Nebraska-Lincoln to replace Love Library Dunkin' in 2027", tag: "News", u: "/news/university-of-nebraska-lincoln-to-replace-love-library-dunkin-in-2027/article_ee302f47-dc6b-4009-bfb8-052fabcb7621.html",
+        why: "It sounds like a joke, but campus dining changes are exactly what the paper covers. The specific location and year are the clue." },
+      { h: "UNL students bring rideshare-style app to fraternity sober rides", tag: "News", u: "/news/unl-students-bring-rideshare-style-app-to-fraternity-sober-rides/article_80836a1b-f2fa-4cc0-83e4-c39aebc6a683.html",
+        why: "A student-led project with a clear campus angle (Greek life safety). It's a realistic, specific story, not a punchline." },
+      { h: "Nebraska Union to open new dining options in spring 2027 after delays", tag: "News", u: "/news/nebraska-union-to-open-new-dining-options-in-spring-2027-after-delays/article_1f908b50-961d-4838-ba8b-e999b6fed244.html",
+        why: "Construction delays and new openings are routine campus reporting. The 'after delays' detail makes it believable." },
+      { h: "First-generation Husker earns Obama Foundation Scholarship", tag: "News", u: "/news/first-generation-husker-earns-obama-foundation-scholarship/article_4edcc133-5e17-4e76-bf34-cb2c8bd1b051.html",
+        why: "A student-achievement profile. Student papers regularly spotlight Huskers who win national honors." },
+      { h: "No. 3 Nebraska wrestling rolls past No. 20 Wyoming in season opener", tag: "Sports", u: "/sports/no-3-nebraska-wrestling-rolls-past-no-20-wyoming-in-season-opener/article_4dbaac83-c382-4b3b-9336-ef6e80cdd415.html",
+        why: "Standard game-recap format: national rankings for both teams, a verb like 'rolls past,' and the occasion (season opener)." },
+      { h: "Three takeaways from Nebraska volleyball's sweep at No. 12 Oregon", tag: "Sports", u: "/sports/three-takeaways-from-nebraska-volleyball-s-sweep-at-no-12-oregon/article_4cd3b260-c021-4046-91a8-7ad704bddbbe.html",
+        why: "'Three takeaways' is the classic post-game format, and Husker volleyball gets heavy coverage." },
+      { h: "Takeaways from Nebraska football's loss to Illinois", tag: "Sports", u: "/sports/football/takeaways-from-nebraska-football-s-loss-to-illinois/article_6a5d8083-5ef4-452d-8e0e-bd6049450e08.html",
+        why: "Another post-game 'takeaways' piece. Sports desks publish these after nearly every major game, wins and losses alike." },
+      { h: "Nebraska football fires offensive coordinator Dana Holgorsen", tag: "Sports · Breaking", u: "/sports/breaking-nebraska-football-fires-offensive-coordinator-dana-holgorsen/article_3530730a-e08a-4d20-a5fd-8bad59beb445.html",
+        why: "A real breaking-news story about a coaching change. A named person and a specific position is how newsrooms report a staffing move. The paper also flagged it as a breaking story, but that label has been trimmed from the headline here." },
+      { h: "When will enough be enough for Nebraska football?", tag: "Sports · Column", u: "/sports/berry-when-will-enough-be-enough-for-nebraska-football/article_e0876288-9de4-473b-876c-49c703d81e21.html",
+        why: "A sports column by a staff writer. The pointed question is typical of opinion writing." },
+      { h: "College is a scam, but it doesn't have to be", tag: "Opinion", u: "/opinion/opinion-college-is-a-scam-but-it-doesn-t-have-to-be/article_c2ceb488-6a87-4852-a56b-bc5eb19a0f44.html",
+        why: "Opinion headlines can be provocative, and student columnists do write about the value of college." },
+      { h: "In defense of being bad at things", tag: "Opinion", u: "/opinion/letters_from/letter-from-the-editor-in-defense-of-being-bad-at-things/article_7958c944-3caa-44a8-b567-93d6306c8fd4.html",
+        why: "Editors write personal letters in the opinion section. The reflective, slightly playful tone fits that genre." },
+      { h: "'Dancing Within the Star City' combines friendly competition, vital message", tag: "Culture", u: "/culture/dancing-within-the-star-city-combines-friendly-competition-vital-message/article_a942784f-2df0-419f-9aac-307b62ca454c.html",
+        why: "An event preview or review in the culture section. Quoted event title followed by two descriptors is a common arts-coverage pattern." },
+      { h: "'Wildwood' is wonderful return to underrated stop-motion medium", tag: "Culture · Review", u: "/culture/review-wildwood-is-wonderful-return-to-underrated-stop-motion-medium/article_f97fdbf2-59cd-4612-b5f4-73e59c9cb0ae.html",
+        why: "Film reviews give a verdict right in the headline, here 'wonderful.'" },
+      { h: "UNL Libraries hosts zine workshop experience at Love Library", tag: "Culture", u: "/culture/campus/unl-libraries-hosts-zine-workshop-experience-at-love-library/article_971814ec-d241-4ae6-9fb7-83bc1853a563.html",
+        why: "A small campus event with a concrete location. Niche but very much a student-paper story." },
+      { h: "FOMO and finances: Budgeting on a college student's income", tag: "Culture", u: "/culture/fomo-and-finances-budgeting-on-a-college-students-income/article_cac1d61f-1596-4704-ae40-9ed42ba12376.html",
+        why: "A service-style lifestyle piece aimed at students, with the colon-and-explainer structure common in features." }
+    ];
+
+    // Fake headlines were written for this game. They are NOT from the Daily Nebraskan.
+    var FAKE = [
+      { h: "UNL to extend Love Library hours to 24/7 during finals week starting spring 2027", tag: "News",
+        why: "Fake. It sounds like a plausible student-services update, but this headline was written for the game. Real stories like this usually name who made the decision and why, such as a dean, a survey or a budget line." },
+      { h: "ASUN senate approves $40,000 for student mental health pop-up clinics", tag: "News · ASUN",
+        why: "Fake. ASUN does fund student programs, so the format fits, but this one was invented. The round dollar figure and the vague 'pop-up clinics' are tells, since real funding stories cite a specific bill or program." },
+      { h: "Nebraska volleyball extends home sellout streak to 400 matches", tag: "Sports",
+        why: "Fake. Husker volleyball sellouts are real news, which is what makes this believable. The milestone number here was made up for the game, so check the actual streak before trusting a figure like this." },
+      { h: "Three takeaways from Nebraska men's basketball's overtime win over Creighton", tag: "Sports",
+        why: "Fake. It copies the paper's 'three takeaways' recap format almost perfectly. The tell is that it names a specific result with no ranking or other detail the paper normally includes." },
+      { h: "Nebraska wrestling's heavyweight out for season with knee injury", tag: "Sports",
+        why: "Fake. Injury news is a staple of sports coverage. This one is generic: no name, no timeline, no quote from a coach. Real injury headlines almost always name the athlete." },
+      { h: "City Council approves new bike lanes along 16th Street near campus", tag: "News",
+        why: "Fake. Lincoln transportation near campus is a believable beat, but this specific approval was invented. Real headlines name the council vote count or the project and funding source." },
+      { h: "'The Substance' returns to Ross Theater for midnight screening", tag: "Culture · Review",
+        why: "Fake. It's presented as a review, but the headline reads like a screening announcement with no verdict. Real review headlines give an opinion, like the real 'Wildwood' one." },
+      { h: "Why UNL's meal plan prices are failing students", tag: "Opinion",
+        why: "Fake. Opinion columns about campus costs are common, so it passes at a glance. The vague 'failing students' framing and the lack of a specific policy or event make it a game-made imitation." },
+      { h: "UNL study finds Nebraska students sleep less than the national average", tag: "News",
+        why: "Fake. Research stories do appear, but a real one would name the department, the researcher or the survey size. 'A study finds' with no source is the giveaway." },
+      { h: "Husker Dining to add late-night menu at Selleck, Abel dining halls", tag: "News",
+        why: "Fake. Dining changes are real campus news, as the actual Love Library and Nebraska Union stories show. This one was invented, and real dining stories usually give a start date or cite a reason." },
+      { h: "Parking permit costs are out of control", tag: "Opinion",
+        why: "Fake. The paper does print letters to the editor. This one is a stock complaint with no specific number, lot or decision, and real letters tend to respond to a particular story or policy." },
+      { h: "First-generation Husker named Rhodes Scholar finalist", tag: "News",
+        why: "Fake. It deliberately echoes the real Obama Foundation Scholarship story. The structure is right, but the headline was invented, and there's no student name or major to anchor it." }
+    ];
+
+    var ROUNDS = 10;
+    var deck, i, score, log;
+    var $ = function (id) { return document.getElementById(id); };
+
+    function shuffle(a) {
+      a = a.slice();
+      for (var k = a.length - 1; k > 0; k--) {
+        var j = Math.floor(Math.random() * (k + 1));
+        var t = a[k]; a[k] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+
+    function start() {
+      // 5 real + 5 fake, mixed
+      var r = shuffle(REAL).slice(0, ROUNDS / 2).map(function (x) { x.real = true; return x; });
+      var f = shuffle(FAKE).slice(0, ROUNDS / 2).map(function (x) { x.real = false; return x; });
+      deck = shuffle(r.concat(f));
+      i = 0; score = 0; log = [];
+      $("start").classList.add("hidden");
+      $("end").classList.add("hidden");
+      $("play").classList.remove("hidden");
+      show();
+    }
+
+    function show() {
+      var q = deck[i];
+      $("count").textContent = "Headline " + (i + 1) + " of " + ROUNDS;
+      $("score").textContent = "Score: " + score;
+      $("headline").textContent = q.h;
+      $("result").classList.add("hidden");
+      $("choices").classList.remove("hidden");
+      $("next").textContent = i === ROUNDS - 1 ? "See results" : "Next headline";
+    }
+
+    function guess(g) {
+      var q = deck[i];
+      var correct = (g === "real") === q.real;
+      if (correct) score++;
+      log.push({ q: q, correct: correct });
+      $("score").textContent = "Score: " + score;
+      var v = $("verdict");
+      v.textContent = correct ? "Correct!" : "Not quite.";
+      v.className = "verdict " + (correct ? "good" : "bad");
+      $("truth").textContent = q.real ? "This headline is REAL." : "This headline is FAKE.";
+      $("why").textContent = q.why;
+      var s = $("source");
+      if (q.real) { s.href = BASE + q.u; s.classList.remove("hidden"); }
+      else { s.classList.add("hidden"); s.removeAttribute("href"); }
+      $("choices").classList.add("hidden");
+      $("result").classList.remove("hidden");
+      $("next").focus();
+    }
+
+    function finish() {
+      $("play").classList.add("hidden");
+      $("end").classList.remove("hidden");
+      $("finalScore").textContent = score + " / " + ROUNDS;
+      $("finalMsg").textContent = score >= 9 ? "Newsroom-ready fact checker." : score >= 6 ? "Solid news instincts." : "The fakes fooled you. Try again!";
+      var ul = $("review");
+      ul.innerHTML = "";
+      log.forEach(function (e) {
+        var li = document.createElement("li");
+        var m = document.createElement("span");
+        m.className = "mark";
+        m.textContent = e.correct ? "✓" : "✗";
+        li.appendChild(m);
+        if (e.q.real) {
+          var a = document.createElement("a");
+          a.href = BASE + e.q.u; a.target = "_blank"; a.rel = "noopener noreferrer";
+          a.textContent = e.q.h;
+          li.appendChild(a);
+        } else {
+          li.appendChild(document.createTextNode(e.q.h));
+        }
+        var sm = document.createElement("small");
+        sm.textContent = e.q.real ? "Real · click to read" : "Fake";
+        li.appendChild(sm);
+        ul.appendChild(li);
+      });
+      window.scrollTo(0, 0);
+    }
+
+    $("startBtn").onclick = start;
+    $("again").onclick = start;
+    $("choices").onclick = function (e) { var g = e.target.getAttribute("data-guess"); if (g) guess(g); };
+    $("next").onclick = function () { i++; if (i >= ROUNDS) finish(); else show(); };
+  </script>
+</body>
+</html>
