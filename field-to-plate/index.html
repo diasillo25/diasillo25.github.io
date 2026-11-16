@@ -288,18 +288,17 @@
         <p class="note" style="margin:0 0 6px">Multiplies the per-worker estimates above. This is illustrative math, not any farm's actual books.</p>
         <div class="controls" role="group" aria-label="Presets">
           <button type="button" class="chip" data-n="1" aria-pressed="false">One worker</button>
-          <button type="button" class="chip" data-n="200" aria-pressed="false" style="margin-left:6px">Daniels Produce (about 200)</button>
           <button type="button" class="chip" data-n="4150" aria-pressed="false" style="margin-left:6px">All of Nebraska (4,150)</button>
         </div>
-        <label for="n">H-2A workers: <output id="n-out">200</output></label>
-        <input id="n" type="range" min="1" max="4150" step="1" value="200">
+        <label for="n">H-2A workers: <output id="n-out">1</output></label>
+        <input id="n" type="range" min="1" max="4150" step="1" value="1">
         <div class="grid3">
           <div><small>Cost with H-2A workers</small><span class="big" id="o-h2a"></span></div>
           <div><small>Same headcount, domestic</small><span class="big" id="o-dom"></span></div>
           <div><small>Extra cost of H-2A</small><span class="big" style="color:var(--h2a)" id="o-diff"></span></div>
         </div>
       </div>
-      <p class="note">Kelly Daniels Jackson estimates her farm spends about $3 per hour in added overhead for H-2A workers, covering housing, transportation, flights, visa and agent fees, utilities, maintenance and supplies. The statewide figure is "back of napkin" math that assumes every worker costs exactly $28,250 and ignores recent federal rule changes.</p>
+      <p class="note">The statewide figure is "back of napkin" math that assumes every worker costs exactly $28,250 and ignores recent federal rule changes.</p>
       <p class="src">Source: Table 3, "Cost of Employing an H-2A Versus a Domestic Worker," Choices Magazine, citing Rural Migration News (2024b) and Castillo, Martin and Rutledge (2024).</p>`;
 
     const max = H2A_TOTAL, read = $("#c-read", el);
