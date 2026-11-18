@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Last Call at Love Library</title>
+<meta name="description" content="A satirical arcade game inspired by UNL replacing the Love Library Dunkin' in 2027.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff3e3;--panel:#ffe6cc;--ink:#3a1230;--muted:#7a5468;--pink:#e6007a;--orange:#d95f00;--bad:#7ad06b}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"VT323",monospace;font-size:20px;overscroll-behavior:none}
+  body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;gap:8px}
+  h1{margin:0;font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(1.5rem,7vw,2.1rem);line-height:1;letter-spacing:.01em;text-transform:uppercase;text-align:center}
+  h1 span{color:var(--pink)}h1 b{color:var(--orange)}
+  .sub{margin:0;color:var(--muted);font-size:1.15rem;text-align:center}
+  #wrap{position:relative;width:min(100%,420px);aspect-ratio:3/4;max-height:72vh;border-radius:16px;overflow:hidden;border:3px solid var(--pink);box-shadow:0 0 30px #ff2d8744;touch-action:none}
+  canvas{width:100%;height:100%;display:block;background:linear-gradient(#ffeed8,#ffd0e2)}
+  #overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;background:#fff3e3ee;gap:8px}
+  #overlay.hide{display:none}
+  #overlay h2{margin:0;font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:1.9rem;line-height:1;letter-spacing:.01em;text-transform:uppercase;color:var(--pink)}
+  #overlay p{margin:0;color:var(--muted);font-size:1.1rem;line-height:1.05}
+  #overlay .legend{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;text-align:left;font-size:1.05rem;line-height:1.05;color:var(--ink)}
+  button{font-family:"Press Start 2P",monospace;font-weight:400;background:var(--pink);color:#fff;border:0;border-radius:999px;padding:12px 16px;font-size:.62rem;line-height:1.5;cursor:pointer;box-shadow:0 4px 0 #a3125a}
+  button:active{transform:translateY(3px);box-shadow:0 1px 0 #a3125a}
+  .ic{display:flex;gap:2px;align-items:center}.ic canvas{width:30px;height:30px;background:none}
+  #overlay .legend{align-items:center}
+  .foot{font-size:1.05rem;color:var(--muted);text-align:center;max-width:420px}
+  .foot a{color:var(--orange)}
+</style>
+</head>
+<body>
+<h1><span>LAST CALL</span> AT <b>LOVE LIBRARY</b></h1>
+<p class="sub">Keep the caffeine up until Dunkin' leaves campus. Drag, tap sides, or use ← →.</p>
+<div id="wrap">
+  <canvas id="c" width="420" height="560"></canvas>
+  <div id="overlay">
+    <h2 id="ot">Last Call at Love Library</h2>
+    <p id="om">The Dunkin' contract expires at the end of 2026. You have <span id="dl">43</span> days of finals, midterms and regret. Don't fall asleep.</p>
+    <div class="legend" id="lg">
+      <span class="ic"><canvas data-k="coffee"></canvas><canvas data-k="iced"></canvas><canvas data-k="donut"></canvas></span><span>Dunkin' = caffeine. Catch it.</span>
+      <span class="ic"><canvas data-k="salad"></canvas><canvas data-k="card"></canvas></span><span>"Dietary options" and meal swipes. Healthy, but the vibe is off.</span>
+      <span class="ic"><canvas data-k="book"></canvas></span><span>Overdue library book. Costs you points.</span>
+    </div>
+    <button id="go">Start the Countdown</button>
+  </div>
+</div>
+<p class="foot">A parody based on <a href="https://www.dailynebraskan.com/news/university-of-nebraska-lincoln-to-replace-love-library-dunkin-in-2027/article_ee302f47-dc6b-4009-bfb8-052fabcb7621.html" target="_blank" rel="noopener">The Daily Nebraskan's report</a>. No Dunkin' employees were harmed. Apply to Dining Services, though.</p>
+
+<script>
+(() => {
+  const cv = document.getElementById('c'), g = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const ov = document.getElementById('overlay'), ot = document.getElementById('ot'),
+        om = document.getElementById('om'), lg = document.getElementById('lg'), go = document.getElementById('go');
+
+  const GOOD = [
+    {k:'coffee', pts:10, caf:12, t:'Medium hot, extra regular'},
+    {k:'iced', pts:15, caf:14, t:'Iced. In November.'},
+    {k:'donut', pts:25, caf:8,  t:'Sprinkles = studying'}
+  ];
+  const BAD = [
+    {k:'salad', pts:0,  caf:-20, t:'Culturally inclusive kale'},
+    {k:'card', pts:0,  caf:-15, t:'Meal swipe accepted'},
+    {k:'book', pts:-30, caf:-5, t:'Overdue. Fine: $0.25 and shame'}
+  ];
+  const LINES = [
+    'Greater convenience and financial flexibility!',
+    'Your meal plan is now valid here.',
+    'Profits stay in-house.',
+    'Change is constant. So is the line.',
+    'Menu input will be requested.',
+    'Dunkin\' employees: please apply.'
+  ];
+  const ENDS = [
+    [0,  'Decaf Dave', 'You were a rounding error in the coffee supply chain.'],
+    [150,'Sleepy Sophomore', 'You napped on a beanbag near the Learning Commons.'],
+    [350,'Finals Week Survivor', 'Two Dunkin\'s and a dream.'],
+    [600,'Franchise Loyalist', 'You will mourn the Boston Kreme in silence.'],
+    [900,'Dunkin\' Dean Emeritus', 'Lorang would like a word. Also a donut.']
+  ];
+
+  // ---- drawn art (no emoji) ----
+  function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+  function drawItem(c, k, x, y, sc) {
+    c.save(); c.translate(x,y); c.scale(sc,sc); c.lineJoin='round';
+    const ink='#3a1230'; c.lineWidth=2.5; c.strokeStyle=ink;
+    if (k==='coffee') {
+      c.beginPath(); c.moveTo(-14,-12); c.lineTo(14,-12); c.lineTo(10,16); c.lineTo(-10,16); c.closePath();
+      c.fillStyle='#fff'; c.fill(); c.stroke();
+      c.fillStyle='#e6007a'; c.beginPath(); c.moveTo(-12.6,-4); c.lineTo(12.6,-4); c.lineTo(11.3,5); c.lineTo(-11.3,5); c.closePath(); c.fill();
+      c.fillStyle='#ff7a00'; c.fillRect(-14,-17,28,6); c.strokeRect(-14,-17,28,6);
+      c.strokeStyle='#ffffffaa'; c.beginPath(); c.moveTo(-4,-24); c.quadraticCurveTo(-8,-29,-3,-33); c.stroke();
+    } else if (k==='iced') {
+      c.fillStyle='#ffffffcc'; c.beginPath(); c.moveTo(-12,-12); c.lineTo(12,-12); c.lineTo(9,17); c.lineTo(-9,17); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle='#8a4b2a'; c.beginPath(); c.moveTo(-11,-3); c.lineTo(11,-3); c.lineTo(9,17); c.lineTo(-9,17); c.closePath(); c.fill();
+      c.fillStyle='#ffffffbb'; c.fillRect(-7,2,8,8); c.fillRect(2,6,7,7);
+      c.strokeStyle='#e6007a'; c.lineWidth=3.5; c.beginPath(); c.moveTo(3,-4); c.lineTo(9,-26); c.stroke();
+    } else if (k==='donut') {
+      c.fillStyle='#e9b36b'; c.beginPath(); c.arc(0,0,17,0,7); c.fill(); c.stroke();
+      c.fillStyle='#ff5fa8'; c.beginPath(); c.arc(0,-1,13.5,0,7); c.fill();
+      c.fillStyle='#fff6ec'; c.beginPath(); c.arc(0,-1,5,0,7); c.fill(); c.lineWidth=2; c.stroke();
+      const sp=['#fff','#ffd23f','#3ad0ff','#fff','#ffd23f','#3ad0ff'];
+      sp.forEach((col,i)=>{const a=i*1.05+.3, rad=9.5; c.save(); c.translate(Math.cos(a)*rad,Math.sin(a)*rad-1); c.rotate(a*2); c.fillStyle=col; c.fillRect(-3,-1,6,2.2); c.restore();});
+    } else if (k==='salad') {
+      c.fillStyle='#4caf50'; [[-9,-8,9],[0,-12,10],[9,-7,9],[-3,-3,9]].forEach(a=>{c.beginPath();c.arc(a[0],a[1],a[2],0,7);c.fill();c.stroke();});
+      c.fillStyle='#e8f5e9'; c.beginPath(); c.moveTo(-18,2); c.lineTo(18,2); c.quadraticCurveTo(16,19,0,19); c.quadraticCurveTo(-16,19,-18,2); c.fill(); c.stroke();
+      c.fillStyle='#e53935'; c.beginPath(); c.arc(-5,-1,2.6,0,7); c.fill();
+    } else if (k==='card') {
+      c.fillStyle='#fdd835'; rr(c,-18,-12,36,24,4); c.fill(); c.stroke();
+      c.fillStyle=ink; c.fillRect(-18,-6,36,6);
+      c.fillStyle='#3a123099'; c.fillRect(-13,5,16,3);
+      c.fillStyle='#d32f2f'; c.beginPath(); c.arc(11,6,3.2,0,7); c.fill();
+    } else if (k==='book') {
+      c.fillStyle='#7b1fa2'; rr(c,-14,-17,28,34,3); c.fill(); c.stroke();
+      c.fillStyle='#ffe0b2'; c.fillRect(-9,-12,20,5); c.fillStyle='#fff'; c.fillRect(-9,-1,14,2.6); c.fillRect(-9,4,10,2.6);
+      c.fillStyle='#d32f2f'; c.beginPath(); c.moveTo(8,17); c.lineTo(8,6); c.lineTo(12,10); c.lineTo(16,6); c.lineTo(16,17); c.closePath(); c.fill();
+    }
+    c.restore();
+  }
+  function drawStudent(c, x, y) {
+    c.save(); c.translate(x,y); c.lineJoin='round'; c.lineWidth=2.5; c.strokeStyle='#3a1230';
+    c.fillStyle='#e6007a'; rr(c,-16,2,32,30,9); c.fill(); c.stroke();            // hoodie
+    c.fillStyle='#ffd0a8'; c.beginPath(); c.arc(0,-8,13,0,7); c.fill(); c.stroke(); // head
+    c.fillStyle='#3a1230'; c.beginPath(); c.arc(-4.5,-8,1.8,0,7); c.arc(4.5,-8,1.8,0,7); c.fill();
+    c.strokeStyle='#3a1230'; c.lineWidth=2; c.beginPath(); c.arc(0,-4,5,.2,Math.PI-.2); c.stroke();
+    c.lineWidth=2.5; c.fillStyle='#c41230';                                       // cap
+    c.beginPath(); c.moveTo(-18,-19); c.lineTo(0,-27); c.lineTo(18,-19); c.lineTo(0,-12); c.closePath(); c.fill(); c.stroke();
+    c.strokeStyle='#ffd23f'; c.beginPath(); c.moveTo(14,-20); c.lineTo(14,-9); c.stroke();
+    c.fillStyle='#ff7a00'; rr(c,10,10,26,20,5); c.fill(); c.strokeStyle='#3a1230'; c.stroke(); // backpack
+    c.restore();
+  }
+  document.querySelectorAll('canvas[data-k]').forEach(cn => {
+    cn.width = cn.height = 60; const c = cn.getContext('2d'); drawItem(c, cn.dataset.k, 30, 32, .85);
+  });
+
+  let S, keys = {}, raf, last, running = false;
+
+  let DUR = 43; // one second per day, from today until Dec 31, 2026
+  function startDay() {
+    const n = new Date(), start = Date.UTC(n.getFullYear(), n.getMonth(), n.getDate());
+    const days = Math.round((Date.UTC(2026,11,31) - start) / 86400000);
+    DUR = days >= 7 ? days : 30; // if past the deadline, just run a 30-day mini-season
+    return start;
+  }
+  function reset() {
+    S = {x:W/2, tx:W/2, caf:70, score:0, t:0, items:[], pops:[], spawn:0, banner:'', bt:0,
+         nextLine:6, shake:0, combo:0, dayStart:startDay()};
+  }
+  reset(); document.getElementById('dl').textContent = DUR;
+
+
+  function spawn() {
+    const bad = Math.random() < 0.28 + Math.min(.2, S.t/200);
+    const pool = bad ? BAD : GOOD;
+    const o = pool[Math.floor(Math.random()*pool.length)];
+    S.items.push({...o, bad, x:30+Math.random()*(W-60), y:-30, vy:130+Math.random()*80+S.t*2.2, r:0, vr:(Math.random()-.5)*4});
+  }
+  function pop(x,y,txt,c){ S.pops.push({x,y,txt,c,life:1}); }
+  function say(txt){ S.banner = txt; S.bt = 2.2; }
+
+  function end(win) {
+    running = false; cancelAnimationFrame(raf);
+    const sc = Math.max(0, Math.round(S.score));
+    let rank = ENDS[0];
+    for (const r of ENDS) if (sc >= r[0]) rank = r;
+    ot.textContent = win ? 'The Contract Expired.' : 'You Fell Asleep.';
+    om.innerHTML = (win
+      ? 'Dunkin\' is gone. A University Dining Services cafe opens early 2027. Your meal plan works there. Your feelings do not.'
+      : 'Caffeine hit zero. You are now drooling on a copy of <i>Intro to Macroeconomics</i> in the Adele Hall Learning Commons.')
+      + `<br><br><b style="color:var(--ink);font-size:1.2rem">Score: ${sc}</b><br><b style="color:var(--pink)">Rank: ${rank[1]}</b><br>${rank[2]}`;
+    lg.style.display = 'none';
+    go.textContent = 'Fight Corporate Consolidation Again';
+    ov.classList.remove('hide');
+  }
+
+  function update(dt) {
+    S.t += dt;
+    const sp = 360;
+    if (keys.ArrowLeft || keys.a) S.tx -= sp*dt;
+    if (keys.ArrowRight || keys.d) S.tx += sp*dt;
+    S.tx = Math.max(30, Math.min(W-30, S.tx));
+    S.x += (S.tx - S.x) * Math.min(1, dt*14);
+
+    S.caf -= dt * (3.5 + S.t/14);
+    S.spawn -= dt;
+    if (S.spawn <= 0) { spawn(); S.spawn = Math.max(.35, .85 - S.t/90); }
+
+    if (S.t > S.nextLine) { say(LINES[Math.floor(Math.random()*LINES.length)]); S.nextLine = S.t + 7 + Math.random()*4; }
+    if (S.bt > 0) S.bt -= dt;
+    if (S.shake > 0) S.shake -= dt;
+
+    for (const it of S.items) {
+      it.y += it.vy*dt; it.r += it.vr*dt;
+      if (!it.dead && Math.abs(it.y-(H-70)) < 34 && Math.abs(it.x-S.x) < 40) {
+        it.dead = true;
+        S.caf = Math.min(100, S.caf + it.caf);
+        S.score += it.pts * (1 + Math.floor(S.combo/5)*.5);
+        if (it.bad) { S.combo = 0; S.shake = .25; pop(it.x, it.y, it.t, '#2e8b2e'); }
+        else { S.combo++; pop(it.x, it.y, '+'+it.pts, '#d98200'); if (S.combo%5===0) pop(S.x, H-130, 'Combo x'+(1+S.combo/10)+'!', '#ff2d87'); }
+      }
+      if (it.y > H+40) it.dead = true;
+    }
+    S.items = S.items.filter(i => !i.dead);
+    for (const p of S.pops) { p.y -= 40*dt; p.life -= dt*.8; }
+    S.pops = S.pops.filter(p => p.life > 0);
+
+    if (S.caf <= 0) end(false);
+    else if (S.t >= DUR) { S.score += 100; end(true); }
+  }
+
+  function draw() {
+    g.save();
+    if (S.shake > 0) g.translate((Math.random()-.5)*8, (Math.random()-.5)*8);
+    g.clearRect(-10,-10,W+20,H+20);
+    // library shelves backdrop
+    for (let i=0;i<6;i++){ g.fillStyle = i%2? '#f0c8a6':'#f6d5bb'; g.fillRect(0,i*100,W,6); }
+    g.fillStyle='#ff7a0044'; g.fillRect(0,H-40,W,40);
+    g.font="8px 'Press Start 2P'"; g.fillStyle='#3a123099'; g.textAlign='left';
+    g.fillText('ADELE HALL LEARNING COMMONS', 10, H-14);
+
+    // items
+    g.textAlign='center'; g.textBaseline='middle';
+    for (const it of S.items) {
+      g.save(); g.translate(it.x, it.y); g.rotate(it.r);
+      drawItem(g, it.k, 0, 0, 1); g.restore();
+    }
+    // player
+    drawStudent(g, S.x, H-70);
+
+    // pops
+    g.font="9px 'Press Start 2P'";
+    for (const p of S.pops) { g.globalAlpha = Math.max(0,p.life); g.fillStyle = p.c; g.fillText(p.txt, Math.max(80,Math.min(W-80,p.x)), p.y); }
+    g.globalAlpha = 1;
+
+    // HUD: caffeine bar (big, full width)
+    const c = Math.max(0, S.caf/100), low = c < .25;
+    const bx=50, by=8, bw=W-60, bh=32;
+    const pulse = low ? .5+.5*Math.sin(S.t*12) : 0;
+    g.textBaseline='middle';
+    g.fillStyle = low ? `rgb(${58+Math.round(pulse*150)},18,48)` : '#3a1230'; rr(g,bx,by,bw,bh,10); g.fill();
+    if (c>0) {
+      const gr = g.createLinearGradient(bx,0,bx+bw,0);
+      if (c>.4){ gr.addColorStop(0,'#ff7a00'); gr.addColorStop(1,'#ffc23f'); }
+      else if (c>.25){ gr.addColorStop(0,'#f2a900'); gr.addColorStop(1,'#ffe066'); }
+      else { gr.addColorStop(0,'#ff1f1f'); gr.addColorStop(1,'#ff7a5c'); }
+      g.save(); rr(g,bx+3,by+3,bw-6,bh-6,7); g.clip();
+      g.fillStyle=gr; g.fillRect(bx+3,by+3,(bw-6)*c,bh-6);
+      g.fillStyle='#ffffff40'; g.fillRect(bx+3,by+3,(bw-6)*c,(bh-6)/2); g.restore();
+    }
+    g.lineWidth=3; g.strokeStyle='#3a1230'; rr(g,bx,by,bw,bh,10); g.stroke();
+    g.textAlign='left'; g.font="11px 'Press Start 2P'"; g.fillStyle='#fff';
+    g.shadowColor='#3a1230'; g.shadowBlur=4; g.fillText(low ? 'CAFFEINE LOW!' : 'CAFFEINE', bx+12, by+bh/2+1);
+    g.textAlign='right'; g.fillText(Math.round(c*100)+'%', bx+bw-12, by+bh/2+1); g.shadowBlur=0;
+    g.fillStyle='#fff'; g.beginPath(); g.arc(25,by+bh/2,22,0,7); g.fill(); g.lineWidth=3; g.stroke();
+    drawItem(g,'coffee',25,by+bh/2+2,.7);
+    g.textBaseline='alphabetic';
+    g.fillStyle='#3a1230'; g.textAlign='right'; g.font="10px 'Press Start 2P'";
+    g.fillText('SCORE '+Math.round(S.score), W-10, 70);
+    // date countdown
+    const d = new Date(S.dayStart + Math.floor(S.t)*86400000);
+    const left = Math.max(0, DUR - Math.floor(S.t));
+    g.textAlign='left'; g.font="8px 'Press Start 2P'"; g.fillStyle='#3a1230';
+    g.fillText(d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}).toUpperCase()+' · '+left+' DAYS LEFT', 10, 70);
+    // combo
+    if (S.combo>=2){ g.fillStyle='#ff2d87'; g.fillText('STREAK x'+S.combo, 10, 90); }
+    // banner
+    if (S.bt > 0) {
+      g.globalAlpha = Math.min(1, S.bt); g.fillStyle='#3a1230ee'; g.fillRect(0,100,W,40);
+      g.textAlign='center'; g.fillStyle='#fff'; g.font="8px 'Press Start 2P'";
+      g.fillStyle='#ffd23f'; g.fillText('UNIVERSITY NOTICE', W/2, 114); g.fillStyle='#fff'; g.fillText(S.banner.toUpperCase(), W/2, 130, W-16); g.globalAlpha=1;
+    }
+    g.restore();
+  }
+
+  function loop(ts) {
+    if (!running) return;
+    const dt = Math.min(.05, (ts-last)/1000); last = ts;
+    update(dt); if (running) draw();
+    raf = requestAnimationFrame(loop);
+  }
+
+  go.onclick = () => {
+    reset(); lg.style.display = ''; ov.classList.add('hide'); running = true; last = performance.now();
+    raf = requestAnimationFrame(loop);
+  };
+
+  addEventListener('keydown', e => { keys[e.key] = true; if (e.key.startsWith('Arrow')) e.preventDefault(); });
+  addEventListener('keyup', e => keys[e.key] = false);
+  function pointer(e) {
+    const r = cv.getBoundingClientRect();
+    if (S) S.tx = (e.clientX - r.left) / r.width * W;
+  }
+  cv.addEventListener('pointermove', pointer);
+  cv.addEventListener('pointerdown', pointer);
+  draw();
+  if (document.fonts && document.fonts.load) Promise.all([document.fonts.load("10px 'Press Start 2P'"), document.fonts.load('20px VT323')]).then(() => { if (!running) draw(); });
+})();
+</script>
+</body>
+</html>
