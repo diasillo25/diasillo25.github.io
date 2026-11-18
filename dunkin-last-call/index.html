@@ -74,6 +74,21 @@
     'Menu input will be requested.',
     'Dunkin\' employees: please apply.'
   ];
+  const LOSSES = [
+    ['You Fell Asleep.', 'Caffeine hit zero. You are now drooling on a copy of <i>Intro to Macroeconomics</i> in the Adele Hall Learning Commons.'],
+    ['Decaf Detected.', 'Your eyelids filed a formal complaint. It was approved before you finished reading it.'],
+    ['Wrong Meal Plan.', 'You tried to pay for a donut with a meal swipe. The universe laughed, and so did the card reader.'],
+    ['Power Nap Gone Wrong.', 'You closed your eyes "for five minutes." It is now Thursday and your group project is due.'],
+    ['Kale Overload.', 'You were last seen wandering toward a salad with a peaceful, hollow smile.'],
+    ['Study Session Over.', 'You highlighted the entire textbook, then yourself. The librarian is still shushing your ghost.'],
+    ['Left On Read.', 'Your brain sent you a notification that said "low battery." You ignored it like every other notification.'],
+    ['Overdue.', 'Your caffeine and your library book are both past due. Only one of them will be forgiven.'],
+    ['Bean Counter.', 'You ran out of beans, and the beans ran out of you. Math checks out.'],
+    ['Syllabus Week Energy.', 'You attempted a full day of classes on vibes alone. The vibes declined to comment.'],
+    ['Powered Down.', 'You have been replaced by a student who found a Starbucks in the Union.'],
+    ['Sleepwalking.', 'You woke up in the stacks holding a stranger\'s highlighter and zero memory of how you got there.']
+  ];
+  let lastLoss = -1;
   const ENDS = [
     [0,  'Decaf Dave', 'You were a rounding error in the coffee supply chain.'],
     [150,'Sleepy Sophomore', 'You napped on a beanbag near the Learning Commons.'],
@@ -166,10 +181,12 @@
     const sc = Math.max(0, Math.round(S.score));
     let rank = ENDS[0];
     for (const r of ENDS) if (sc >= r[0]) rank = r;
-    ot.textContent = win ? 'The Contract Expired.' : 'You Fell Asleep.';
+    let loss = null;
+    if (!win) { let i; do { i = Math.floor(Math.random()*LOSSES.length); } while (i === lastLoss && LOSSES.length > 1); lastLoss = i; loss = LOSSES[i]; }
+    ot.textContent = win ? 'The Contract Expired.' : loss[0];
     om.innerHTML = (win
       ? 'Dunkin\' is gone. A University Dining Services cafe opens early 2027. Your meal plan works there. Your feelings do not.'
-      : 'Caffeine hit zero. You are now drooling on a copy of <i>Intro to Macroeconomics</i> in the Adele Hall Learning Commons.')
+      : loss[1])
       + `<br><br><b style="color:var(--ink);font-size:1.2rem">Score: ${sc}</b><br><b style="color:var(--pink)">Rank: ${rank[1]}</b><br>${rank[2]}`;
     lg.style.display = 'none';
     go.textContent = 'Fight Corporate Consolidation Again';
