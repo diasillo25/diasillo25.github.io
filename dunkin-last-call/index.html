@@ -12,11 +12,11 @@
   :root{--bg:#fff3e3;--panel:#ffe6cc;--ink:#3a1230;--muted:#7a5468;--pink:#e6007a;--orange:#d95f00;--bad:#7ad06b}
   *{box-sizing:border-box}
   html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"VT323",monospace;font-size:20px;overscroll-behavior:none}
-  body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;gap:8px}
+  body{display:flex;flex-direction:column;align-items:center;padding:12px;gap:8px}
   h1{margin:0;font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(1.5rem,7vw,2.1rem);line-height:1;letter-spacing:.01em;text-transform:uppercase;text-align:center}
   h1 span{color:var(--pink)}h1 b{color:var(--orange)}
   .sub{margin:0;color:var(--muted);font-size:1.15rem;text-align:center}
-  #wrap{position:relative;width:min(100%,420px);aspect-ratio:3/4;max-height:72vh;border-radius:16px;overflow:hidden;border:3px solid var(--pink);box-shadow:0 0 30px #ff2d8744;touch-action:none}
+  #wrap{flex:none;position:relative;width:min(100%,420px);aspect-ratio:3/4;max-height:72vh;border-radius:16px;overflow:hidden;border:3px solid var(--pink);box-shadow:0 0 30px #ff2d8744;touch-action:none}
   canvas{width:100%;height:100%;display:block;background:linear-gradient(#ffeed8,#ffd0e2)}
   #overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;background:#fff3e3ee;gap:8px}
   #overlay.hide{display:none}
@@ -27,6 +27,10 @@
   button:active{transform:translateY(3px);box-shadow:0 1px 0 #a3125a}
   .ic{display:flex;gap:2px;align-items:center}.ic canvas{width:30px;height:30px;background:none}
   #overlay .legend{align-items:center}
+  .story{width:min(100%,420px);background:#ffe6cc;border:3px solid var(--orange);border-radius:14px;padding:12px 16px;margin-top:4px}
+  .story h3{margin:0 0 6px;font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:1.35rem;line-height:1.1;text-transform:uppercase;color:var(--pink)}
+  .story p{margin:0 0 8px;font-size:1.15rem;line-height:1.1;color:var(--ink)}
+  .story p:last-child{margin:0}
   .foot{font-size:1.05rem;color:var(--muted);text-align:center;max-width:420px}
   .foot a{color:var(--orange)}
 </style>
@@ -47,6 +51,11 @@
     <button id="go">Start the Countdown</button>
   </div>
 </div>
+<section class="story">
+  <h3>The real story</h3>
+  <p>The University of Nebraska-Lincoln announced on Nov. 10 that the Dunkin' in the Adele Hall Learning Commons at Love Library, the last one left on campus, will close when its contract ends at the end of 2026. In early 2027 it will be replaced by a cafe run by University Dining Services. Dunkin' first arrived at Love Library in 2016, and a second location on East Campus opened in 2021 and was gone by the 2023-24 school year.</p>
+  <p>University leaders say the switch brings more convenience and financial flexibility for students, who will be able to use their meal plans there. The university will also have more control over the menu, and the profits will stay on campus instead of going to an outside franchise company. Officials say they plan to ask students for input on the menu, and they've encouraged current Dunkin' employees to apply for Dining Services jobs. Some longtime Dunkin' fans are disappointed, but Starbucks and Tazza Coffee will still be around campus.</p>
+</section>
 <p class="foot">A parody based on <a href="https://www.dailynebraskan.com/news/university-of-nebraska-lincoln-to-replace-love-library-dunkin-in-2027/article_ee302f47-dc6b-4009-bfb8-052fabcb7621.html" target="_blank" rel="noopener">The Daily Nebraskan's report</a>. No Dunkin' employees were harmed. Apply to Dining Services, though.</p>
 
 <script>
